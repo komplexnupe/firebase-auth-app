@@ -13,6 +13,7 @@ This is a CLI app designed to help you track your employees, their roles, and th
     
 ## <a name="installation">Installation</a>
 
+npm i 
 firebase emulators:start
     
 ## <a name="usage">Usage</a>
