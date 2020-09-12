@@ -35,4 +35,3 @@ auth.onAuthStateChanged(user => {
         userDetails.innerHTML = `<h3>Signed Out</h3>`;
     }
 });
-
