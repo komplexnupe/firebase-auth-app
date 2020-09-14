@@ -35,3 +35,44 @@ auth.onAuthStateChanged(user => {
         userDetails.innerHTML = `<h3>Signed Out</h3>`;
     }
 });
+
+// Firestore
+const db = firebase.firestore();
+
+const createThing = document.getElementById('createThing');
+const thingsList = document.getElementById('thingsList');
+
+let thingsRef;
+let unsubscribe;
+
+auth.onAuthStateChanged(user => {
+    if (user) {
+        thingsRef = db.collection('things');
+        const { serverTimestamp } = firebase.firestore.FieldValue;
+        createThing.onclick = () => {
+            thingsRef.add({
+                uid: user.uid,
+                name: faker.commerce.productName(),
+                createdAt: serverTimestamp()
+            });
+        }
+        // Query
+        unsubscribe = thingsRef
+            .where('uid', '==', user.uid)
+            .orderBy('createdAt')
+            // Requires a query
+            .onSnapshot(querySnapshot => {
+                const items = querySnapshot.docs.map(doc => {
+                    return `<li>${doc.data().name}</li>`
+                });
+
+                thingsList.innerHTML = items.join('');
+
+            });
+
+
+    } else {
+        unsubscribe && unsubscribe();
+
+    }
+});
